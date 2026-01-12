@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des événements - {{ parent() }}{% endblock %}
+
+{% block body %}
+<style>
+    .events-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+    .event-card {
+        background: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .event-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .event-card h3 {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+    }
+    .event-info {
+        margin: 0.5rem 0;
+        color: #666;
+    }
+    .event-info strong {
+        color: #2c3e50;
+    }
+</style>
+
+<h1>Événements à venir</h1>
+
+{% if events is empty %}
+    <p style="margin-top: 2rem; color: #666;">Aucun événement disponible pour le moment.</p>
+{% else %}
+    <div class="events-grid">
+        {% for event in events %}
+            <div class="event-card">
+                <h3>{{ event.title }}</h3>
+                <div class="event-info">
+                    <strong>Date :</strong> {{ event.date|date('d/m/Y à H:i') }}
+                </div>
+                <div class="event-info">
+                    <strong>Lieu :</strong> {{ event.location }}
+                </div>
+                <div class="event-info">
+                    <strong>Places restantes :</strong> {{ event.remainingPlaces }} / {{ event.capacity }}
+                </div>
+                <a href="{{ path('app_event_show', {id: event.id}) }}" class="btn btn-primary" style="margin-top: 1rem;">
+                    Voir les détails
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}

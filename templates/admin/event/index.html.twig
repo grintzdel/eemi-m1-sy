@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration des événements - {{ parent() }}{% endblock %}
+
+{% block body %}
+<style>
+    .admin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+    .table-container {
+        background: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        overflow-x: auto;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th {
+        background: #2c3e50;
+        color: white;
+        padding: 1rem;
+        text-align: left;
+    }
+    td {
+        padding: 1rem;
+        border-bottom: 1px solid #ddd;
+    }
+    tr:hover {
+        background: #f8f9fa;
+    }
+    .actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+</style>
+
+<div class="admin-header">
+    <h1>Administration des événements</h1>
+    <a href="{{ path('app_admin_event_new') }}" class="btn btn-success">Créer un événement</a>
+</div>
+
+{% if events is empty %}
+    <p style="color: #666;">Aucun événement créé pour le moment.</p>
+{% else %}
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Date</th>
+                    <th>Lieu</th>
+                    <th>Capacité</th>
+                    <th>Réservations</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                    <tr>
+                        <td><strong>{{ event.title }}</strong></td>
+                        <td>{{ event.date|date('d/m/Y H:i') }}</td>
+                        <td>{{ event.location }}</td>
+                        <td>{{ event.capacity }}</td>
+                        <td>{{ event.reservations|length }} / {{ event.capacity }}</td>
+                        <td>
+                            <div class="actions">
+                                <a href="{{ path('app_admin_event_edit', {id: event.id}) }}" class="btn btn-primary">
+                                    Modifier
+                                </a>
+                                <form method="post" action="{{ path('app_admin_event_delete', {id: event.id}) }}"
+                                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet événement ?');">
+                                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+{% endblock %}
