@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un événement - {{ parent() }}{% endblock %}
+
+{% block body %}
+<style>
+    .form-container {
+        background: white;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        max-width: 600px;
+        margin: 2rem auto;
+    }
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #2c3e50;
+        font-weight: 500;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="datetime-local"],
+    textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
+    }
+    textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+    .error {
+        color: #e74c3c;
+        font-size: 0.9rem;
+        margin-top: 0.25rem;
+    }
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+</style>
+
+<div class="form-container">
+    <h1>Créer un événement</h1>
+
+    {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_label(form.title) }}
+            {{ form_widget(form.title) }}
+            {{ form_errors(form.title) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.description) }}
+            {{ form_widget(form.description) }}
+            {{ form_errors(form.description) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.date) }}
+            {{ form_widget(form.date) }}
+            {{ form_errors(form.date) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.location) }}
+            {{ form_widget(form.location) }}
+            {{ form_errors(form.location) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.capacity) }}
+            {{ form_widget(form.capacity) }}
+            {{ form_errors(form.capacity) }}
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-success">Créer</button>
+            <a href="{{ path('app_admin_event_index') }}" class="btn btn-primary">Annuler</a>
+        </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

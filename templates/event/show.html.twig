@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ event.title }} - {{ parent() }}{% endblock %}
+
+{% block body %}
+<style>
+    .event-detail {
+        background: white;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        max-width: 800px;
+        margin: 2rem auto;
+    }
+    .event-detail h1 {
+        color: #2c3e50;
+        margin-bottom: 1.5rem;
+    }
+    .event-detail .info-row {
+        margin: 1rem 0;
+        padding: 0.75rem;
+        background: #f8f9fa;
+        border-radius: 4px;
+    }
+    .event-detail .info-row strong {
+        color: #2c3e50;
+    }
+    .event-detail .description {
+        margin: 1.5rem 0;
+        line-height: 1.8;
+    }
+    .event-detail .actions {
+        margin-top: 2rem;
+        display: flex;
+        gap: 1rem;
+    }
+    .capacity-warning {
+        background: #fff3cd;
+        color: #856404;
+        padding: 0.75rem;
+        border-radius: 4px;
+        margin: 1rem 0;
+    }
+    .capacity-full {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 0.75rem;
+        border-radius: 4px;
+        margin: 1rem 0;
+    }
+</style>
+
+<div class="event-detail">
+    <h1>{{ event.title }}</h1>
+
+    <div class="info-row">
+        <strong>Date :</strong> {{ event.date|date('d/m/Y à H:i') }}
+    </div>
+
+    <div class="info-row">
+        <strong>Lieu :</strong> {{ event.location }}
+    </div>
+
+    <div class="info-row">
+        <strong>Capacité :</strong> {{ event.capacity }} places
+    </div>
+
+    <div class="info-row">
+        <strong>Places restantes :</strong> {{ event.remainingPlaces }} / {{ event.capacity }}
+    </div>
+
+    <div class="description">
+        <strong>Description :</strong>
+        <p style="margin-top: 0.5rem;">{{ event.description }}</p>
+    </div>
+
+    {% if event.isFull %}
+        <div class="capacity-full">
+            Cet événement est complet. Il n'y a plus de places disponibles.
+        </div>
+    {% elseif event.remainingPlaces <= 5 %}
+        <div class="capacity-warning">
+            Attention : Il ne reste que {{ event.remainingPlaces }} place(s) disponible(s) !
+        </div>
+    {% endif %}
+
+    <div class="actions">
+        <a href="{{ path('app_event_list') }}" class="btn btn-primary">Retour à la liste</a>
+
+        {% if app.user %}
+            {% if hasAlreadyReserved %}
+                <button class="btn btn-success" disabled>Déjà réservé</button>
+            {% elseif not event.isFull %}
+                <form method="post" action="{{ path('app_event_reserve', {id: event.id}) }}" style="display: inline;">
+                    <button type="submit" class="btn btn-success">Réserver</button>
+                </form>
+            {% endif %}
+        {% else %}
+            <a href="{{ path('app_login') }}" class="btn btn-success">
+                Connectez-vous pour réserver
+            </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
